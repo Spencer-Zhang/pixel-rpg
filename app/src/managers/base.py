@@ -1,6 +1,5 @@
 from sqlalchemy import MetaData
 
-
 class BaseModel:
     @property
     def json(self):

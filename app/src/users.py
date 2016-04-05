@@ -17,19 +17,21 @@ users = UserManager()
 
 @bp_users.route('/users', methods=['POST'])
 def create_user():
-    session = Session()
-    data = json.loads(request.data)
-    username = data['username']
-    email = data['email']
-    password = str(data['password'])
     try:
+        session = Session()
+        data = json.loads(request.data)
+        username = data['username']
+        email = data['email']
+        password = str(data['password'])
         user = users.create_user(session, username, email, password)
         res = json.dumps(user.json), 201
+    except KeyError as e:
+        res = 'Invalid user model', 400
     except Exception as e:
         if 'Key (username)' in e.message:
-            res = 'Username {} is already used'.format(username)
+            res = 'Username {} is already used'.format(username), 409
         elif 'Key (email)' in e.message:
-            res = 'Email {} is already used'.format(email)
+            res = 'Email {} is already used'.format(email), 409
         else:
             res = e.message, 500
     finally:
