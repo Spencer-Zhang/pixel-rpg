@@ -18,7 +18,7 @@ bad_data = {
     'password': 'testpassword'
 }
 
-class TestUserManager(unittest.TestCase):
+class TestUsers(unittest.TestCase):
 
     def test_01_create_user(self):
         """Should create a user"""
@@ -55,6 +55,12 @@ class TestUserManager(unittest.TestCase):
         user = res.json()
         self.assertEqual(user['username'], 'Kevin')
         self.assertEqual(user['email'], 'kmit@test.com')
+
+    def test_041_get_missing(self):
+        """Should return 404 for a non-existent user"""
+        res = requests.get(
+            'http://localhost:5000/users/Dave', headers=headers)
+        self.assertEqual(res.status_code, 404)
 
     def test_99_delete_user(self):
         """Should delete a user"""

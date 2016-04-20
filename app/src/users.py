@@ -49,6 +49,8 @@ def get_users():
 def get_user(username):
     session = Session()
     user = users.get_user(session, {'username': username})
+    if not user:
+        return 'User not found: {}'.format(username), 404
     session.close()
     return json.dumps(user.json), 200
 
